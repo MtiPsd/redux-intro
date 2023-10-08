@@ -4,7 +4,10 @@ const initialStateAccount = {
   loanPurpose: "",
 };
 
-export function accountReducer(state = initialStateAccount, action) {
+export default function accountReducer(
+  state = initialStateAccount,
+  action,
+) {
   switch (action.type) {
     case "account/deposit":
       return {
@@ -61,3 +64,5 @@ function payLoan() {
     type: "account/payLoan",
   };
 }
+
+export { deposit, withdraw, requestLoan, payLoan };
