@@ -57,7 +57,7 @@ function deposit(amount, currency) {
     return { type: "account/deposit", payload: amount };
   }
 
-  // MIDDLEWARE [happens after component and before store]
+  // MIDDLEWARE [happens after component and before store & reducer]
   return async (dispatch, getState) => {
     dispatch({ type: "account/convertingCurrency" });
 
