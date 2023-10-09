@@ -71,7 +71,7 @@ function AccountOperations() {
             <option value="GBP">British Pound</option>
           </select>
 
-          <button onClick={handleDeposit} disable={isLoading}>
+          <button onClick={handleDeposit} disable={`${isLoading}`}>
             {isLoading ? "Converting..." : `Deposit ${depositAmount}`}
           </button>
         </div>

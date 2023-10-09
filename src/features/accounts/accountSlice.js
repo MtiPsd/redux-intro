@@ -13,6 +13,7 @@ const accountSlice = createSlice({
   reducers: {
     deposit(state, action) {
       state.balance += action.payload;
+      state.isLoading = false;
     },
 
     withdraw(state, action) {
@@ -43,10 +44,36 @@ const accountSlice = createSlice({
       state.loan = 0;
       state.purpose = "";
     },
+
+    convertingCurrency(state) {
+      state.isLoading = true;
+    },
   },
 });
 
-export const { deposit, withdraw, requestLoan, payLoan } =
+export const { withdraw, requestLoan, payLoan } =
   accountSlice.actions;
+
+// for implementing asynchronous operations
+// we can simply write code as before [REDUX TOOLKIT]
+export function deposit(amount, currency) {
+  if (currency === "USD") {
+    return { type: "account/deposit", payload: amount };
+  }
+
+  // MIDDLEWARE [happens after component and before store & reducer]
+  return async (dispatch, getState) => {
+    dispatch({ type: "account/convertingCurrency" });
+
+    const res = await fetch(
+      `https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=USD`,
+    );
+
+    const data = await res.json();
+    const converted = data.rates.USD;
+
+    dispatch({ type: "account/deposit", payload: converted });
+  };
+}
 
 export default accountSlice.reducer;
